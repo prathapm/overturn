@@ -222,14 +222,21 @@ function Workspace({ appealId }: { appealId: string }) {
           </div>
 
           {appeal.status === "draft" && (
-            <button
-              onClick={() => { useStore.getState().markPendingConfirmation(appealId); log({ actor: "member", summary: "Asked to review and sign" }); }}
-              disabled={!completeness.complete}
-              className="w-full rounded-md border border-human px-4 py-2 text-sm font-semibold text-human disabled:opacity-40"
-              title={completeness.complete ? "" : "Complete every criterion first"}
-            >
-              Review &amp; sign
-            </button>
+            <div>
+              <button
+                onClick={() => { useStore.getState().markPendingConfirmation(appealId); log({ actor: "member", summary: "Asked to review and sign" }); }}
+                disabled={!completeness.complete}
+                className="w-full rounded-md border border-human px-4 py-2 text-sm font-semibold text-human disabled:opacity-40"
+              >
+                Review &amp; sign
+              </button>
+              {!completeness.complete && (
+                <p className="mt-1.5 text-[11px] text-muted">
+                  Signing unlocks when all 5 criteria are complete ({completeness.score} now): each needs an argument of at least a
+                  sentence or two <em>and</em> an attached record that supports it. Ask your agent to draft it, or write it yourself.
+                </p>
+              )}
+            </div>
           )}
         </section>
       </div>
