@@ -1,0 +1,42 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "+4%",
+  "segments": [
+    {
+      "id": "s0_title",
+      "kind": "slide",
+      "slide": "slide_title.html",
+      "text": "In Medicare Advantage alone, health plans made fifty-three million prior-authorization decisions in 2024. When they said no, only eleven and a half percent of people appealed. Eighty-one percent of those appeals won. Millions of winnable denials are never contested, because appealing is paperwork."
+    },
+    {
+      "id": "s1_before",
+      "kind": "capture",
+      "capture": "before",
+      "text": "This is Maya. Her orthopedist ordered a knee MRI after eight weeks of physical therapy. Her plan denied it: conservative therapy not documented. Here is a browser-automation agent, with no WebMCP, trying to appeal on the portal as it exists today. It finds the denial. It opens the determination letter: two pages of prose it has to read and guess from. It finds the appeal form: six pages, blue or black ink. And then it reaches the instructions. Mail it, or fax it. No agent can fax. Every automated run stops here, exactly where people do."
+    },
+    {
+      "id": "s2_whynow",
+      "kind": "slide",
+      "slide": "slide_whynow.html",
+      "text": "Since January 2026, federal rule CMS-0057-F requires plans to decide prior authorizations within seven days, and by 2027 to expose them through a structured API. The plan side is being made machine-readable by law. Nobody is building the member's side."
+    },
+    {
+      "id": "s3_after",
+      "kind": "capture",
+      "capture": "after",
+      "text": "Same portal, same account, now with WebMCP site tools. The agent reads the structured denial and the plan's own five criteria, and sees which of Maya's records support each one. It opens the appeal and drafts one argument per criterion, citing her records by name. The draft lands on the page, labelled drafted by your agent, and every sentence is editable. Completeness: zero of five, because nothing is attached yet, and attaching a record is Maya's job. She attaches her therapy notes, the orthopedic note and her medication history, and rewrites one argument in her own words. The agent notices, re-checks, five of five, and proposes expedited review, because her symptoms are documented as worsening. Her call. Then it asks to submit. It cannot submit. It can only ask. Maya signs. Case number. Seventy-two-hour clock. And the tool surface changes: drafting tools are gone, status tools are in. Every action the agent took is on the page. Nothing happened off-screen."
+    },
+    {
+      "id": "s4_impact",
+      "kind": "slide",
+      "slide": "slide_impact.html",
+      "text": "The impact. For members: three point six million winnable denials a year that nobody files today, each one now a single sitting. For health plans: the 2027 API mandate arrives regardless. An agent-native portal turns compliance into a product, and replaces fax-and-phone appeals with structured ones. And the pattern repeats. Any claim-shaped dispute, a benefits denial, a billing error, a property or auto claim, has the same shape: structured reads, drafted proposals, one human signature."
+    },
+    {
+      "id": "s5_close",
+      "kind": "slide",
+      "slide": "slide_close.html",
+      "text": "Overturn. Your agent does the paperwork on the plan's own portal. You make the decisions that are yours. Built for the WebMCP Challenge by Prathap, Rajani and Chitral. Open source, MIT."
+    }
+  ]
+}
