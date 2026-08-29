@@ -4,7 +4,7 @@
 site; you make the four decisions that are actually yours.
 
 Entry for [The WebMCP Challenge](https://webmcp.devpost.com/) (OpenAI, Sep 2026).
-Live: **LIVE_URL** · Legacy "before" version: **LIVE_URL/legacy** · Video: **VIDEO_URL**
+Live: **https://overturn-one.vercel.app** · Legacy "before" version: **https://overturn-one.vercel.app/legacy** · Video: **VIDEO_URL**
 
 > Every payer, clinic, member, record, policy and number on the site is fictional and synthetic.
 > Larkspur Health Plan does not exist.
