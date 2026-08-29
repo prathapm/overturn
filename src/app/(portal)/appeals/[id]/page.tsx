@@ -341,7 +341,7 @@ function CaseView({ appealId }: { appealId: string }) {
             <button className="underline" onClick={() => { advanceClock(appealId, "upheld"); log({ actor: "plan", summary: "Decision issued: upheld" }); }}>Decide: upheld</button>
           </>
         )}
-        {(appeal.status === "overturned" || appeal.status === "external_review_requested") && <span>Case closed on the plan's side.</span>}
+        {(appeal.status === "overturned" || appeal.status === "external_review_requested") && <span>Case closed on the plan’s side.</span>}
         {appeal.status === "upheld" && <span>Ask your agent to request an external review, or do it yourself: <button className="underline" onClick={() => useStore.getState().markExternalPending(appealId)}>prepare request</button>.</span>}
       </section>
     </div>

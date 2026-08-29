@@ -174,15 +174,14 @@ export const denialTools = (ctx: ToolContext): ToolDef[] => [
       const attachments = S().attachments;
       return {
         policy_id: policy.id,
-        title: policy.title,
         criteria: policy.criteria.map((c) => ({
           id: c.id,
           criterion: c.text,
-          evidence_needed: c.evidence,
           records_on_file: allRecords
             .filter((r) => r.supports.includes(c.id))
-            .map((r) => ({ record_id: r.id, title: r.title, attached: attachments.includes(r.id) })),
+            .map((r) => `${r.id}: ${r.title}${attachments.includes(r.id) ? " (attached)" : ""}`),
         })),
+        records_legend: "Cite records by title. Attaching is the member's click.",
         next: "start_appeal, then draft_appeal with one argument per criterion id",
       };
     },
