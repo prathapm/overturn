@@ -7,7 +7,7 @@ export type CriterionAssessment = {
   evidence: "attached" | "available" | "none";
   attachedRecords: string[];
   availableRecords: string[];
-  status: "complete" | "needs_evidence" | "needs_argument" | "missing";
+  status: "complete" | "needs_evidence" | "needs_argument" | "too_short" | "missing";
 };
 
 export type Completeness = {
@@ -25,7 +25,9 @@ export function evaluateCompleteness(
 ): Completeness {
   const criteria = policy.criteria.map<CriterionAssessment>((c) => {
     const section = appeal?.sections.find((s) => s.criterionId === c.id);
-    const hasArgument = !!section && section.text.trim().length > 20;
+    const trimmed = section?.text.trim() ?? "";
+    const hasArgument = trimmed.length > 20;
+    const tooShort = trimmed.length > 0 && !hasArgument;
     const supporting = records.filter((r) => r.supports.includes(c.id));
     const attached = supporting.filter((r) => attachments.includes(r.id));
     const available = supporting.filter((r) => !attachments.includes(r.id));
@@ -33,6 +35,7 @@ export function evaluateCompleteness(
     let status: CriterionAssessment["status"] = "missing";
     if (hasArgument && evidence === "attached") status = "complete";
     else if (hasArgument) status = "needs_evidence";
+    else if (tooShort) status = "too_short";
     else if (evidence === "attached") status = "needs_argument";
     return {
       id: c.id,
@@ -48,7 +51,8 @@ export function evaluateCompleteness(
   const nextSteps: string[] = [];
   for (const c of criteria) {
     if (c.status === "complete") continue;
-    if (c.argument === "missing") nextSteps.push(`Write an argument for ${c.id}.`);
+    if (c.status === "too_short") nextSteps.push(`The argument for ${c.id} is too short — cite the record and the dates.`);
+    else if (c.argument === "missing") nextSteps.push(`Write an argument for ${c.id}.`);
     if (c.evidence === "available") {
       const titles = c.availableRecords
         .map((id) => records.find((r) => r.id === id)?.title)

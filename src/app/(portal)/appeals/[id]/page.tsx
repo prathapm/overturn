@@ -237,11 +237,12 @@ function Workspace({ appealId }: { appealId: string }) {
   );
 }
 
-function StatusPill({ status }: { status: "complete" | "needs_evidence" | "needs_argument" | "missing" }) {
+function StatusPill({ status }: { status: "complete" | "needs_evidence" | "needs_argument" | "too_short" | "missing" }) {
   const map = {
     complete: ["Complete", "bg-ok-soft text-ok"],
     needs_evidence: ["Needs a record", "bg-human-soft text-human"],
     needs_argument: ["Needs an argument", "bg-brand-soft text-brand"],
+    too_short: ["Argument too short", "bg-brand-soft text-brand"],
     missing: ["Missing", "bg-deny-soft text-deny"],
   } as const;
   const [label, cls] = map[status];
