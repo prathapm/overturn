@@ -24,6 +24,7 @@ const browser = await puppeteer.launch({
   executablePath: CHROME,
   headless: true,
   args: ["--enable-features=WebMCP", "--no-sandbox", "--disable-gpu", "--hide-scrollbars", "--font-render-hinting=none"],
+  protocolTimeout: 120000,
 });
 const page = await browser.newPage();
 await page.setViewport({ width: 1280, height: 800, deviceScaleFactor: 1 });
@@ -59,15 +60,15 @@ await page.evaluateOnNewDocument(() => {
       new Promise((res) => {
         cur.style.display = "block";
         const sx = Number(cur.dataset.x ?? x), sy = Number(cur.dataset.y ?? y);
-        const t0 = performance.now();
-        const step = (t) => {
-          const k = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - k, 3);
+        const t0 = Date.now();
+        const step = () => {
+          const k = Math.min(1, (Date.now() - t0) / ms), e = 1 - Math.pow(1 - k, 3);
           const cx = sx + (x - sx) * e, cy = sy + (y - sy) * e;
           cur.style.left = cx + "px"; cur.style.top = cy + "px";
-          if (k < 1) requestAnimationFrame(step);
+          if (k < 1) setTimeout(step, 16);
           else { cur.dataset.x = x; cur.dataset.y = y; res(); }
         };
-        requestAnimationFrame(step);
+        step();
       });
     window.__click = () => {
       cur.animate([{ transform: "translate(-4px,-2px) scale(1)" }, { transform: "translate(-4px,-2px) scale(.8)" }, { transform: "translate(-4px,-2px) scale(1)" }], { duration: 220 });
@@ -85,7 +86,9 @@ const hud = (label, note = "") => page.evaluate((l, n) => {
 const resetHud = () => page.evaluate(() => { sessionStorage.setItem("hud_start", String(Date.now())); sessionStorage.setItem("hud_steps", "0"); sessionStorage.setItem("hud_note", ""); });
 const bump = () => page.evaluate(() => sessionStorage.setItem("hud_steps", String(Number(sessionStorage.getItem("hud_steps") ?? 0) + 1)));
 
+const ensureOverlay = () => page.evaluate(() => { if (!window.__moveCursor) { window.__moveCursor = () => Promise.resolve(); window.__click = () => {}; } });
 async function moveTo(handle, ms = 650) {
+  await ensureOverlay();
   const box = await handle.boundingBox();
   if (!box) return null;
   const x = box.x + Math.min(box.width / 2, 120), y = box.y + box.height / 2;
@@ -109,9 +112,9 @@ async function clickOn(selector, { navigate = false, ms = 650 } = {}) {
 }
 async function smoothScroll(px, ms = 1800) {
   await page.evaluate((px, ms) => new Promise((res) => {
-    const y0 = window.scrollY, t0 = performance.now();
-    const step = (t) => { const k = Math.min(1, (t - t0) / ms); window.scrollTo(0, y0 + px * (1 - Math.pow(1 - k, 2))); if (k < 1) requestAnimationFrame(step); else res(); };
-    requestAnimationFrame(step);
+    const y0 = window.scrollY, t0 = Date.now();
+    const step = () => { const k = Math.min(1, (Date.now() - t0) / ms); window.scrollTo(0, y0 + px * (1 - Math.pow(1 - k, 2))); if (k < 1) setTimeout(step, 16); else res(); };
+    step();
   }), px, ms);
   await bump();
 }
@@ -158,13 +161,14 @@ try {
     await resetHud();
     await hud("Automation agent · no WebMCP · reading the DOM");
     const stop = await record();
+    await ensureOverlay();
     await page.evaluate(() => window.__moveCursor(640, 420, 10));
     await sleep(1500);
     await clickOn("a::-p-text(View)", { navigate: true });                       // denial page
     await sleep(1600);
     await smoothScroll(140, 900);
     await clickOn("a::-p-text(Determination_Letter)");                            // "opens" the PDF
-    await page.goto(`file://${path.join(repoRoot, "scripts", "legacy-letter.html")}`, { waitUntil: "load" });
+    await page.goto(`${BASE}/legacy/documents/letter.html`, { waitUntil: "load" });
     await hud("Automation agent · no WebMCP · reading a PDF letter");
     await sleep(1200);
     await smoothScroll(520, 2600);
@@ -174,7 +178,7 @@ try {
     await bump();
     await sleep(900);
     await clickOn("a::-p-text(Form LHP-402)");                                     // "opens" the form
-    await page.goto(`file://${path.join(repoRoot, "scripts", "legacy-form.html")}`, { waitUntil: "load" });
+    await page.goto(`${BASE}/legacy/documents/form.html`, { waitUntil: "load" });
     await hud("Automation agent · no WebMCP · six-page form, free text");
     await sleep(1000);
     await smoothScroll(700, 2600);
@@ -206,6 +210,7 @@ try {
     await hud("Agent with WebMCP site tools · calls logged on the page");
     await sleep(600);
     const stop = await record();
+    await ensureOverlay();
     await page.evaluate(() => window.__moveCursor(640, 380, 10));
     await sleep(1800);
     await clickOn("button::-p-text(Replay)");
