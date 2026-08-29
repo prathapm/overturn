@@ -47,10 +47,11 @@ await page.evaluateOnNewDocument(() => {
       const start = Number(sessionStorage.getItem("hud_start") ?? Date.now());
       const steps = Number(sessionStorage.getItem("hud_steps") ?? 0);
       const note = sessionStorage.getItem("hud_note") ?? "";
+      const nosteps = sessionStorage.getItem("hud_nosteps") === "1";
       const el = Math.max(0, Math.floor((Date.now() - start) / 1000));
       const mm = String(Math.floor(el / 60)), ss = String(el % 60).padStart(2, "0");
       hud.innerHTML = `<div style="opacity:.75;font-size:11px;letter-spacing:.08em;text-transform:uppercase">${label}</div>
-        <div style="display:flex;gap:18px;margin-top:4px;font-variant-numeric:tabular-nums"><span>steps <b style="font-size:18px">${steps}</b></span><span>elapsed <b style="font-size:18px">${mm}:${ss}</b></span></div>
+        <div style="display:flex;gap:18px;margin-top:4px;font-variant-numeric:tabular-nums">${nosteps ? "" : `<span>steps <b style="font-size:18px">${steps}</b></span>`}<span>elapsed <b style="font-size:18px">${mm}:${ss}</b></span></div>
         ${note ? `<div style="margin-top:6px;color:#ffb4a8;font-size:13px">${note}</div>` : ""}`;
       hud.style.display = label ? "block" : "none";
     };
@@ -95,7 +96,7 @@ async function moveTo(handle, ms = 650) {
   await page.evaluate((x, y, ms) => window.__moveCursor(x, y, ms), x, y, ms);
   return { x, y };
 }
-async function clickOn(selector, { navigate = false, ms = 650 } = {}) {
+async function clickOn(selector, { navigate = false, ms = 650, fake = false } = {}) {
   const h = await page.waitForSelector(selector, { timeout: 8000 });
   await h.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
   await sleep(250);
@@ -103,6 +104,12 @@ async function clickOn(selector, { navigate = false, ms = 650 } = {}) {
   await sleep(180);
   await page.evaluate(() => window.__click());
   await bump();
+  if (fake) {
+    // Links that open a new tab would push this page to the background and stop the screencast;
+    // show the click, then navigate in place.
+    await sleep(250);
+    return;
+  }
   if (navigate) {
     await Promise.all([page.waitForNavigation({ waitUntil: "networkidle0" }).catch(() => {}), page.mouse.click(pt.x, pt.y)]);
   } else {
@@ -130,7 +137,11 @@ async function record() {
     frames.push({ f, t: metadata.timestamp });
     try { await client.send("Page.screencastFrameAck", { sessionId }); } catch {}
   });
-  await client.send("Page.startScreencast", { format: "jpeg", quality: 88, maxWidth: 1280, maxHeight: 800, everyNthFrame: 1 });
+  const opts = { format: "jpeg", quality: 88, maxWidth: 1280, maxHeight: 800, everyNthFrame: 1 };
+  await client.send("Page.enable");
+  // The screencast stops on every full-page navigation; restart it for each new top-level document.
+  client.on("Page.frameNavigated", ({ frame }) => { if (!frame.parentId) client.send("Page.startScreencast", opts).catch(() => {}); });
+  await client.send("Page.startScreencast", opts);
   return async () => {
     try { await client.send("Page.stopScreencast"); } catch {}
     await sleep(300);
@@ -167,7 +178,7 @@ try {
     await clickOn("a::-p-text(View)", { navigate: true });                       // denial page
     await sleep(1600);
     await smoothScroll(140, 900);
-    await clickOn("a::-p-text(Determination_Letter)");                            // "opens" the PDF
+    await clickOn("a::-p-text(Determination_Letter)", { fake: true });                            // "opens" the PDF
     await page.goto(`${BASE}/legacy/documents/letter.html`, { waitUntil: "load" });
     await hud("Automation agent · no WebMCP · reading a PDF letter");
     await sleep(1200);
@@ -177,7 +188,7 @@ try {
     await hud("Automation agent · no WebMCP · looking for the appeal form");
     await bump();
     await sleep(900);
-    await clickOn("a::-p-text(Form LHP-402)");                                     // "opens" the form
+    await clickOn("a::-p-text(Form LHP-402)", { fake: true });                                     // "opens" the form
     await page.goto(`${BASE}/legacy/documents/form.html`, { waitUntil: "load" });
     await hud("Automation agent · no WebMCP · six-page form, free text");
     await sleep(1000);
@@ -207,7 +218,8 @@ try {
     await page.evaluate(() => localStorage.clear());
     await page.reload({ waitUntil: "networkidle0" });
     await resetHud();
-    await hud("Agent with WebMCP site tools · calls logged on the page");
+    await page.evaluate(() => sessionStorage.setItem("hud_nosteps", "1"));
+    await hud("Agent with WebMCP site tools · every call logged on the page");
     await sleep(600);
     const stop = await record();
     await ensureOverlay();

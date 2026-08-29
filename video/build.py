@@ -44,7 +44,7 @@ if not (slides_dir / "slide_title.png").exists():
 # 3. captures
 for name in ("before", "after"):
     d = WORK / name
-    if SKIP_CAPTURE and (d / "list.txt").exists():
+    if SKIP_CAPTURE and (d / "list.txt").exists() and name not in os.environ.get("RECAPTURE", "").split(","):
         continue
     if d.exists(): shutil.rmtree(d)
     run(["node", HERE / "capture.mjs", name, d])
