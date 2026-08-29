@@ -398,7 +398,8 @@ export function toolsForRoute(pathname: string, ctx: ToolContext): ToolDef[] {
   if (SCOPE_MODE === "all") return all;
 
   const tools: ToolDef[] = [...alwaysTools()];
-  if (/^\/denials\/[^/]+/.test(pathname)) tools.push(...denialTools(ctx));
+  // Denial tools are available from the member home too, so "help me appeal this denial" works from the landing page.
+  if (pathname === "/" || /^\/denials\/[^/]+/.test(pathname)) tools.push(...denialTools(ctx));
   const m = pathname.match(/^\/appeals\/([^/]+)/);
   if (m) {
     const appeal = s.appeals.find((a) => a.id === decodeURIComponent(m[1]));

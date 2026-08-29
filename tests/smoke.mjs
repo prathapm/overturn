@@ -70,7 +70,7 @@ try {
   await page.reload({ waitUntil: "networkidle0" });
   await sleep(500);
   let names = await toolNames(page);
-  ok(names.includes("get_member_context") && names.includes("get_deadlines"), `always-on tools registered: ${names.join(", ")}`);
+  ok(names.includes("get_member_context") && names.includes("get_denial"), `home tools registered: ${names.join(", ")}`);
   ok(!names.includes("draft_appeal"), "workspace tools NOT registered on home (scoped surface)");
   const ctx = await call(page, "get_member_context");
   ok(ctx.out?.member?.name === "Maya Chen", "get_member_context returns Maya");
