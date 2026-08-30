@@ -3,48 +3,49 @@
   "rate": "+9%",
   "segments": [
     {
-      "id": "s0_title",
+      "id": "s0_what",
       "kind": "slide",
       "slide": "slide_title.html",
-      "text": "Analyze, recommend, and convert any website to WebMCP, in one shot. The web was built for people clicking; agents arrive and guess: PDFs, forms whose rules they can't see, fax numbers. WebMCP lets a site say exactly what an agent may do, but every site has to be retrofitted. Overturn finds the readiness gaps, recommends the fixes, and implements the WebMCP tool layer, with the person still in charge."
+      "text": "Analyze, recommend, and convert any website to WebMCP, in one shot. Websites were designed for humans. Some grew APIs; many were patched in the back end just to keep working for people clicking. Agents hit every one of those patches. Overturn finds the readiness gaps, recommends the fixes, and implements the WebMCP tool layer, with the person still in charge."
     },
     {
-      "id": "s1_retrofit",
+      "id": "s1_tam",
+      "kind": "slide",
+      "slide": "slide_tam.html",
+      "text": "Two hundred and eighteen million active websites, all built for humans. Agent-ready today: about four hundred hand-built WebMCP sites, plus three million Shopify storefronts switched on in one platform decision. Roughly one percent. About forty-five percent expose data or APIs but assume a person clicking. The rest, over half the web, is patchwork: prior authorizations forty percent electronic, three in four insurance agents re-keying into portals, two percent of federal forms digitized. All of it can be converted. Agentic commerce alone: a trillion dollars in the US by 2030."
+    },
+    {
+      "id": "s2_case",
+      "kind": "slide",
+      "slide": "slide_case.html",
+      "text": "Take healthcare. Medicare Advantage alone: fifty-three million prior-authorization decisions a year. Only eleven and a half percent of denials appealed; eighty-one percent of appeals won. Nobody appeals, because the portal is a PDF letter, a six-page form and a fax number. Let's make this member portal WebMCP-ready."
+    },
+    {
+      "id": "s3_retrofit",
       "kind": "capture",
       "capture": "retrofit",
-      "text": "Paste a URL. Overturn Retrofit reads the site's forms, tables, documents and submission instructions. This is a health plan's member portal. Readiness: forty out of a hundred. Two blockers: the facts live inside PDFs, and the consequential step is fax or mail. Two gaps: the rules the decision cites aren't exposed, and support is phone-only. From that it recommends nine tools: reads for the list, the decision and the plan's criteria; a draft that renders as a proposal; a completeness check; and a submit gated behind a human click. Then it generates the register-tool code. And here is that plan, built."
+      "text": "Paste the portal's URL. Overturn reads its forms, tables, documents and submission instructions. Readiness: forty out of a hundred. Two blockers: the facts live inside PDFs, and the consequential step is fax or mail. Two gaps: the rules the decision cites aren't exposed, and support is phone-only. From that it recommends nine tools: reads for the list, the decision and the plan's criteria; a draft that renders as a proposal; a completeness check; and a submit gated behind a human click. Then it generates the register-tool code, and applies it.",
+      "speed": 1.15
     },
     {
-      "id": "s2_how",
-      "kind": "slide",
-      "slide": "slide_how.html",
-      "text": "The loop: analyze, recommend, generate, apply, verify. The rules are short. Reads are free. Writes are proposals the page renders. Consequential actions wait for a human click. Every call is logged on the page."
-    },
-    {
-      "id": "s3_before",
+      "id": "s4_before",
       "kind": "capture",
       "capture": "before",
       "speed": 2.2,
-      "text": "Before: on the legacy portal, an automation agent gets exactly as far as a person does. The letter, the six-page form, the fax number. It stalls."
+      "text": "Before: an automation agent on the legacy portal gets exactly as far as a person does. The letter, the six-page form, the fax number. It stalls."
     },
     {
-      "id": "s4_after",
+      "id": "s5_after",
       "kind": "capture",
       "capture": "after",
-      "speed": 1.45,
-      "text": "After: same portal, same account, with the recommended tools. The agent reads the structured denial and the plan's five criteria, opens the appeal, and drafts one argument per criterion citing Maya's records. The draft lands on the page, labelled and editable. Attaching records is Maya's job; she attaches three and rewrites one argument herself. The agent notices, re-checks, five of five, and proposes expedited review. Then it asks to submit. It cannot submit; it can only ask. Maya signs. Case number, seventy-two-hour clock, and the tool surface changes: drafting tools out, status tools in."
-    },
-    {
-      "id": "s5_impact",
-      "kind": "slide",
-      "slide": "slide_impact.html",
-      "text": "Why it matters. Every site owner faces this retrofit; Overturn turns a guess into a plan. In healthcare, the plan side is being made machine-readable by law: CMS rule 0057-F, seven-day decisions now, a structured API by 2027. The payoff counts: three point six million winnable denials a year go unfiled. Each becomes one sitting. The same shape repeats in every claim-like dispute."
+      "speed": 1.75,
+      "text": "After: the same portal with the recommended tools. The agent reads the structured denial and the plan's five criteria, opens the appeal, and drafts one argument per criterion citing Maya's records; the draft lands on the page, labelled and editable. Attaching records is Maya's job; she attaches three and rewrites one argument. The agent re-checks, five of five, proposes expedited review, then asks to submit. It cannot submit; it can only ask. Maya signs. Case number, seventy-two-hour clock, and the tool surface changes."
     },
     {
       "id": "s6_close",
       "kind": "slide",
       "slide": "slide_close.html",
-      "text": "Overturn. Analyze, recommend, and convert any website to WebMCP, in one shot. Built by Prathap, Rajani and Chitral. Open source, MIT."
+      "text": "Every website was built for humans. Overturn makes each one agent-ready without taking the human out. Built by Prathap, Rajani and Chitral. Open source, MIT."
     }
   ]
 }
