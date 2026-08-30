@@ -53,7 +53,7 @@ for name in ("retrofit", "before", "after"):
 clips = []
 for seg in spec["segments"]:
     clip = WORK / f"{seg['id']}.mp4"
-    a = seg["adur"] + 0.9  # lead-in + tail
+    a = seg["adur"] + 0.7  # lead-in + tail
     if seg["kind"] == "slide":
         D = a
         png = slides_dir / seg["slide"].replace(".html", ".png")

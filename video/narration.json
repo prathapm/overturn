@@ -1,42 +1,50 @@
 {
   "voice": "en-US-AndrewMultilingualNeural",
-  "rate": "+6%",
+  "rate": "+9%",
   "segments": [
     {
       "id": "s0_title",
       "kind": "slide",
       "slide": "slide_title.html",
-      "text": "In Medicare Advantage alone, health plans made fifty-three million prior-authorization decisions in 2024. Only eleven and a half percent of denials were appealed. Eighty-one percent of those appeals won. Millions of winnable denials are never contested, because appealing is paperwork."
+      "text": "Most of the web was built for people clicking. Agents arrive and guess: they read PDFs, fill forms whose rules they can't see, and stop at fax numbers. WebMCP lets a site say exactly what an agent may do, but every site has to be retrofitted by hand. Overturn is the process that does it: analyze, find the gaps, recommend the tools, generate the code, and prove it with the person still in charge."
     },
     {
-      "id": "s1_before",
+      "id": "s1_retrofit",
+      "kind": "capture",
+      "capture": "retrofit",
+      "text": "Paste a URL. Overturn Retrofit reads the site's forms, tables, documents and submission instructions. This is a health plan's member portal. Readiness: forty out of a hundred. Two blockers: the facts live inside PDFs, and the consequential step is fax or mail. Two gaps: the rules the decision cites aren't exposed, and support is phone-only. From that it recommends nine tools: reads for the list, the decision and the plan's criteria; a draft that renders as a proposal; a completeness check; and a submit gated behind a human click. Then it generates the register-tool code. And here is that plan, built."
+    },
+    {
+      "id": "s2_how",
+      "kind": "slide",
+      "slide": "slide_how.html",
+      "text": "The loop: analyze, recommend, generate, apply, verify. The rules are short. Reads are free. Writes are proposals the page renders. Consequential actions wait for a human click. Every call is logged on the page."
+    },
+    {
+      "id": "s3_before",
       "kind": "capture",
       "capture": "before",
-      "text": "This is Maya. Her plan denied her knee MRI: conservative therapy not documented, after eight weeks of physical therapy. Here is a browser-automation agent, with no WebMCP, trying to appeal on today's portal. It finds the denial. It opens the letter: two pages of prose to read and guess from. It finds the form: six pages, blue or black ink. Then it reaches the instructions: mail it, or fax it. No agent can fax. Every automated run stops here, exactly where people do."
+      "speed": 2.2,
+      "text": "Before: on the legacy portal, an automation agent gets exactly as far as a person does. The letter, the six-page form, the fax number. It stalls."
     },
     {
-      "id": "s2_whynow",
-      "kind": "slide",
-      "slide": "slide_whynow.html",
-      "text": "Since January 2026, federal rule CMS-0057-F requires plans to decide prior authorizations within seven days, and by 2027 to expose them through a structured API. The plan side is being made machine-readable by law. Nobody is building the member's side."
-    },
-    {
-      "id": "s3_after",
+      "id": "s4_after",
       "kind": "capture",
       "capture": "after",
-      "text": "Same portal, same account, now with WebMCP site tools. The agent reads the structured denial and the plan's own five criteria, and sees which of Maya's records support each one. It opens the appeal and drafts one argument per criterion, citing her records by name. The draft lands on the page, labelled drafted by your agent, every sentence editable. Completeness: zero of five, because attaching a record is Maya's job. She attaches her therapy notes, the orthopedic note and her medication history, and rewrites one argument in her own words. The agent notices, re-checks, five of five, and proposes expedited review. Her call. Then it asks to submit. It cannot submit. It can only ask. Maya signs. Case number, seventy-two-hour clock, and the tool surface changes: drafting tools out, status tools in. Every action is on the page."
+      "speed": 1.45,
+      "text": "After: same portal, same account, with the recommended tools. The agent reads the structured denial and the plan's five criteria, opens the appeal, and drafts one argument per criterion citing Maya's records. The draft lands on the page, labelled and editable. Attaching records is Maya's job; she attaches three and rewrites one argument herself. The agent notices, re-checks, five of five, and proposes expedited review. Then it asks to submit. It cannot submit; it can only ask. Maya signs. Case number, seventy-two-hour clock, and the tool surface changes: drafting tools out, status tools in."
     },
     {
-      "id": "s4_impact",
+      "id": "s5_impact",
       "kind": "slide",
       "slide": "slide_impact.html",
-      "text": "The impact. For members: three point six million winnable denials a year that nobody files today, each now a single sitting. For health plans: the 2027 mandate arrives regardless; an agent-native portal turns compliance into a product. And the pattern repeats. Every claim-shaped dispute, from benefits to billing to property and auto, has the same shape: structured reads, drafted proposals, one human signature."
+      "text": "Why it matters. Every site owner faces this retrofit; Overturn turns a guess into a plan. In healthcare the plan side is being made machine-readable by law: CMS rule 0057-F, seven-day decisions now, a structured API by 2027. And the payoff counts: three point six million winnable denials a year go unfiled. Each becomes one sitting. The same shape repeats in every claim-like dispute."
     },
     {
-      "id": "s5_close",
+      "id": "s6_close",
       "kind": "slide",
       "slide": "slide_close.html",
-      "text": "Overturn. Your agent does the paperwork on the plan's own portal. You make the decisions that are yours. Built for the WebMCP Challenge by Prathap, Rajani and Chitral. Open source, MIT."
+      "text": "Overturn. Analyze any site, retrofit it for agents, keep the person in charge. Built for the WebMCP Challenge by Prathap, Rajani and Chitral. Open source, MIT."
     }
   ]
 }

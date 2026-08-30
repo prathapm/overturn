@@ -1,77 +1,73 @@
 # Overturn — Devpost submission text
 
-**Tagline:** Your agent does the paperwork on the plan's own portal. You make the four decisions
-that are actually yours.
+**Tagline:** Turn any website into one people and their agents use together — analyze it, find the
+gaps, recommend the WebMCP tools, generate the code, and prove it with the person still in charge.
 
 ## Why this use case is a strong fit for WebMCP
 
-Appealing a health-plan denial is the archetype of a task that is *possible* for a person and
-*impossible* for an agent on today's web: the denial is a PDF, the plan's criteria are not on the
-portal, the form is six pages of free text, and submission is by fax. Nobody appeals — only 11.5% of
-Medicare Advantage denials are contested, though 80.7% of appeals win (KFF, Jan 2026).
+WebMCP lets a site say exactly what an agent may do. The catch is that every one of the hundreds of
+millions of sites built for people clicking has to be retrofitted — by hand, page by page, with
+judgment calls about what should be a read, what should be a proposal, and what must wait for a
+human. Overturn is that process as a product.
 
-WebMCP fixes exactly this shape of problem. The portal exposes the denial, the plan's own
-criteria, the deadlines and the appeal itself as typed tools that run in the member's signed-in
-session. The agent stops scraping and starts calling. And because the tools live *in the page*,
-the member watches the work happen on the same screen — which is the only way a person should ever
-trust an agent with a medical appeal.
+**Overturn Retrofit** takes a URL, scans the site's forms, tables, documents, submission
+instructions, session and headers, and produces an agent-readiness score, the blockers and gaps,
+a recommended tool inventory (read / write-proposal / gated), and generated
+`document.modelContext.registerTool()` code. Because it also exposes its *own* tools
+(`analyze_site`, `get_readiness_report`, `list_recommended_tools`, `get_generated_code`), a
+developer's agent can drive the retrofit itself.
 
-Why now: since Jan 1 2026, CMS-0057-F forces plans to decide prior auths in 7 days and, by
-Jan 1 2027, to expose a structured prior-authorization API. The plan side is being made
-machine-readable by law. Overturn is the member's side.
+To prove the loop closes, we picked the hardest common case: appealing a health-plan denial.
+Only 11.5% of Medicare Advantage denials are contested, although 80.7% of appeals win (KFF,
+Jan 2026) — because the denial is a PDF, the criteria aren't on the portal, the form is six pages,
+and submission is by fax. We ran Retrofit on a fictional plan's legacy portal, built the plan it
+produced, and shipped the result on the same site.
 
 ## How it creates a better user experience
 
-Overturn is one site in two modes. `/legacy` is the portal as it exists everywhere today.
-`/` is the same portal made agent-native. In the agent-native mode:
+**For a site owner:** paste a URL, get a plan instead of a guess — what blocks agents today
+(documents, offline channels, hidden rules, phone-only support, iframes, missing headers), which
+tools to add, how to gate them, and the code to start from.
 
-- The agent reads the structured denial and the plan's itemized criteria, and drafts one argument
-  per criterion, citing the member's records by title. The draft appears **on the page**, labelled
-  *drafted by your agent*, and every sentence is editable.
-- The member attaches records (a file picker needs a human gesture), edits the draft in her own
-  words, and the agent notices the change and re-checks completeness.
-- The agent proposes expedited review with a reason; the member chooses.
-- `submit_appeal` never submits. It returns `pending_confirmation` and a **Sign & submit** card
-  appears. Only the member's click files the appeal and returns a case number — and the server
-  refuses any other path.
-- Every tool call is logged in an Activity panel on the page. Nothing happens off-screen.
-
-The product principle is the one that made developers trust Cursor: not that it is fast, but that
-you see every line it writes and can change it. Pair programming for paperwork.
+**For the person using the retrofitted site:** the agent does the reading, the mapping of evidence
+to rules, the drafting and the deadline math — on the page, labelled, editable. The person does the
+four things that are theirs: choose the records, say it in their own words, pick the urgency, sign.
+`submit_appeal` never submits; it returns `pending_confirmation`, a Sign & submit card appears, and
+only the person's click files the appeal — the server refuses any other path. Every tool call is
+logged in an Activity panel. Nothing happens off-screen. That is the lesson that made developers
+trust Cursor: not speed, but seeing every line and being able to change it.
 
 ## What people and agents can do together that was difficult or impossible before
 
-Before: a member with a denial letter, a six-page form and a fax number — and an agent that can read
-the PDF but cannot fax. The task stalls at the one honest wall.
+Before: a member with a denial letter, a six-page form and a fax number — and an agent that can
+read the PDF but cannot fax. The task stalls at the one honest wall.
 
-Now: in one sitting, on one page, the member and her agent get from denial to a filed appeal with a
-case number and a decision clock. The agent does the reading, the mapping of evidence to criteria,
-the drafting, the completeness checking and the deadline math. The member does the four things
-that are hers: choose the records, say it in her own words, pick the urgency, sign. If the plan
-upholds its denial, the agent prepares the external-review request and the member confirms it.
-
-That division is not a limitation of the demo; it is the design, and in healthcare it is the law
-(California SB 1120: only a clinician may make the denial decision).
+Now: in one sitting, on one page, the member and her agent go from denial to a filed appeal with a
+case number and a decision clock. And the site owner got there from a ten-second analysis and a
+generated plan rather than a blank page. The same pattern — structured reads, drafted proposals, one
+human signature — applies to every claim-shaped dispute.
 
 ## How we implemented WebMCP
 
-- 14 tools registered with `document.modelContext.registerTool()` — imperative API, top-level
-  page, the subset ChatGPT's browser supports. `navigator.modelContext` as legacy fallback.
-- **State-scoped surface:** a single `ToolRegistry` computes the tool set from the route *and*
-  the appeal's status. Denial-page tools unregister when you leave; drafting tools give way to
-  status tools once the appeal is filed. One `AbortController` per tool; aborting unregisters.
-- **Reads are free, writes are proposals:** reads carry `readOnlyHint`; write tools render a
-  proposal on the page. Two gated commits (`submit_appeal`, `request_external_review`) return
-  `pending_confirmation`; the on-page click is the only path to the server, which requires a
-  human-confirmation marker and returns 403 otherwise.
-- Descriptions under 500 characters, written so an agent discovers the flow order; outputs capped
-  at ~1.5K characters. Headers `Origin-Agent-Cluster: ?1` and `Permissions-Policy: tools=(self)`.
-- Per-visitor sandbox in `localStorage`, so judges never collide. Stateless submit endpoint.
-- Verified with a Puppeteer WebMCP smoke test (Chrome 152, `--enable-features=WebMCP`) that drives
-  the hero flow through the registered tools and asserts the gate holds, and by hand in ChatGPT's
-  desktop browser and Chrome with the WebMCP flag.
-- A **Replay** button animates the same tool calls and clicks for judges without an agent attached,
-  and `/readiness` documents what blocked agents in the legacy portal and what changed — the
-  retrofit record.
+- **Analyzer** (`src/lib/retrofit/analyze.ts`): server-side crawl of up to 8 same-origin pages
+  (SSRF-guarded: http(s) only, private ranges refused, redirects/size/time capped); deterministic
+  heuristics turn forms, tables, detail pages, PDFs, fax/mail/"cannot be submitted online" text,
+  cited policies, phone-only support, iframes, sign-in and headers into findings and a tool
+  inventory; `generate.ts` emits the `registerTool` module and a Markdown report.
+- **14 tools on the appeals portal**, registered with `document.modelContext.registerTool()`
+  (imperative API, top-level page — the subset ChatGPT's browser supports), with
+  `navigator.modelContext` as legacy fallback. A single `ToolRegistry` computes the tool set from
+  the route *and* the appeal's status; one `AbortController` per tool; aborting unregisters.
+- **Reads are free, writes are proposals, two gated commits.** `readOnlyHint` on reads; write
+  tools render on the page; `submit_appeal` and `request_external_review` return
+  `pending_confirmation` and the on-page click is the only path to the server
+  (`403 human_confirmation_required` otherwise).
+- **4 meta-tools on `/retrofit`** so an agent can run the analysis and read the plan.
+- Descriptions under 500 characters, written so the flow order is discoverable; outputs capped at
+  ~1.5K; headers `Origin-Agent-Cluster: ?1` and `Permissions-Policy: tools=(self)`; per-visitor
+  sandbox in `localStorage` so judges never collide.
+- **Verified** with a Puppeteer WebMCP smoke test (Chrome 152, `--enable-features=WebMCP`) — 36
+  checks covering the scoped surface across navigation, the hero flow through the tools, the gate,
+  the analyzer, the guards and the meta-tools — and by hand in ChatGPT's desktop browser and Chrome.
 
-All names, records and numbers are fictional. MIT licensed.
+All payers, clinics, people, records and numbers on the site are fictional. MIT licensed.
