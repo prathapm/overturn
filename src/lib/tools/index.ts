@@ -2,6 +2,7 @@ import { evaluateCompleteness } from "../completeness";
 import { appealWindow, decisionClock, decisionDue, fmtDate, fmtDateTime } from "../dates";
 import { payer, policy, records as allRecords } from "../seed";
 import { type Appeal, useStore } from "../store";
+import { useRetrofit } from "../retrofit/client";
 import type { ToolDef } from "../webmcp";
 
 /**
@@ -390,12 +391,72 @@ export const afterTools = (): ToolDef[] => [
   },
 ];
 
+// ---------- retrofit platform (meta: an agent can drive the retrofit itself) ----------
+
+export const retrofitTools = (): ToolDef[] => [
+  {
+    name: "analyze_site",
+    description:
+      "Run an agent-readiness analysis of a website: scans up to 8 public same-origin pages, scores readiness 0–100, lists blockers and gaps, and recommends a WebMCP tool inventory. Renders the report on the page. Then call get_readiness_report or list_recommended_tools.",
+    inputSchema: {
+      type: "object",
+      properties: { url: { type: "string", description: "Site URL, e.g. https://overturn-one.vercel.app/legacy" } },
+      required: ["url"],
+    },
+    execute: async ({ url }) => {
+      const r = await useRetrofit.getState().run(String(url ?? ""));
+      return { url: r.url, score: r.score, summary: r.summary, findings: r.findings.map((f) => `${f.severity}: ${f.title}`), tools_recommended: r.tools.length, next: "get_readiness_report" };
+    },
+  },
+  {
+    name: "get_readiness_report",
+    description:
+      "The current agent-readiness report: score, summary counts, and each finding with severity, detail and fix. Run analyze_site first.",
+    readOnly: true,
+    inputSchema: { type: "object", properties: {} },
+    execute: () => {
+      const r = useRetrofit.getState().report;
+      if (!r) return { error: "no_report", do_first: "analyze_site" };
+      return { url: r.url, score: r.score, summary: r.summary, findings: r.findings.map((f) => ({ severity: f.severity, title: f.title, fix: f.fix })) };
+    },
+  },
+  {
+    name: "list_recommended_tools",
+    description:
+      "The recommended WebMCP tools for the analyzed site: name, kind (read / write-proposal / gated), one-line purpose, and the page affordance each came from.",
+    readOnly: true,
+    inputSchema: { type: "object", properties: {} },
+    execute: () => {
+      const r = useRetrofit.getState().report;
+      if (!r) return { error: "no_report", do_first: "analyze_site" };
+      return r.tools.map((t) => ({ name: t.name, kind: t.kind, purpose: t.why, from: `${t.source.page} ${t.source.affordance}` }));
+    },
+  },
+  {
+    name: "get_generated_code",
+    description:
+      "The generated registerTool() code for one recommended tool (by name) or the module header. Reads carry readOnlyHint; gated tools return pending_confirmation.",
+    readOnly: true,
+    inputSchema: { type: "object", properties: { tool_name: { type: "string", description: "Tool name from list_recommended_tools; omit for the header" } } },
+    execute: ({ tool_name }) => {
+      const r = useRetrofit.getState().report;
+      if (!r) return { error: "no_report", do_first: "analyze_site" };
+      if (!tool_name) return { header: r.generatedCode.split("export async function")[0] };
+      const t = r.tools.find((x) => x.name === String(tool_name));
+      if (!t) return { error: "tool_not_found" };
+      return { name: t.name, kind: t.kind, description: t.description, inputSchema: t.inputSchema, register: `await register({ name: "${t.name}", description: ..., inputSchema: ..., annotations: { readOnlyHint: ${t.kind === "read"} }, execute })` };
+    },
+  },
+];
+
 // ---------- scoping ----------
 
 export function toolsForRoute(pathname: string, ctx: ToolContext): ToolDef[] {
   const s = S();
-  const all = [...alwaysTools(), ...denialTools(ctx), ...workspaceTools(), ...afterTools()];
+  const all = [...alwaysTools(), ...denialTools(ctx), ...workspaceTools(), ...afterTools(), ...retrofitTools()];
   if (SCOPE_MODE === "all") return all;
+
+  if (pathname.startsWith("/retrofit")) return [...alwaysTools(), ...retrofitTools()];
 
   const tools: ToolDef[] = [...alwaysTools()];
   // Denial tools are available from the member home too, so "help me appeal this denial" works from the landing page.

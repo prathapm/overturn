@@ -212,6 +212,42 @@ try {
     console.log("frames", await stop());
   }
 
+  if (mode === "retrofit") {
+    await page.goto(`${BASE}/retrofit`, { waitUntil: "networkidle0" });
+    await resetHud();
+    await page.evaluate(() => sessionStorage.setItem("hud_nosteps", "1"));
+    await hud("Overturn Retrofit · analyze → recommend → generate");
+    await sleep(500);
+    const stop = await record();
+    await ensureOverlay();
+    await page.evaluate(() => window.__moveCursor(640, 300, 10));
+    await sleep(1800);
+    const input = await page.waitForSelector('input[aria-label="Site URL"]');
+    await moveTo(input, 700);
+    await sleep(900);
+    await clickOn("button::-p-text(Analyze)");
+    await page.waitForFunction(() => /agent-readiness/i.test(document.body.innerText), { timeout: 15000 });
+    await sleep(2500);
+    await smoothScroll(220, 1200);
+    await sleep(4500);                                    // findings
+    await clickOn("button::-p-text(Recommended tools)");
+    await sleep(1200);
+    await smoothScroll(260, 1400);
+    await sleep(5500);                                    // tools table
+    await clickOn("button::-p-text(Generated code)");
+    await sleep(1500);
+    await smoothScroll(420, 2600);
+    await sleep(2500);
+    await clickOn("button::-p-text(Recommended tools)");
+    await sleep(800);
+    const applied = await page.waitForSelector("a::-p-text(See it applied)");
+    await applied.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
+    await sleep(300);
+    await moveTo(applied, 800);
+    await sleep(2500);
+    console.log("frames", await stop());
+  }
+
   if (mode === "after") {
     const pace = Number(process.env.PACE ?? 2400);
     await page.goto(`${BASE}/denials/4471?pace=${pace}`, { waitUntil: "networkidle0" });

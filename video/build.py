@@ -42,7 +42,7 @@ if not (slides_dir / "slide_title.png").exists():
     run(["node", HERE / "capture.mjs", "slides", slides_dir])
 
 # 3. captures
-for name in ("before", "after"):
+for name in ("retrofit", "before", "after"):
     d = WORK / name
     if SKIP_CAPTURE and (d / "list.txt").exists() and name not in os.environ.get("RECAPTURE", "").split(","):
         continue
@@ -63,8 +63,9 @@ for seg in spec["segments"]:
     else:
         d = WORK / seg["capture"]
         raw = WORK / f"{seg['id']}_raw.mp4"
+        speed = float(seg.get("speed", 1.0))
         run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", d / "list.txt",
-             "-vf", "scale=1280:800,fps=30,format=yuv420p", "-c:v", "libx264", "-crf", "20", "-preset", "medium", raw])
+             "-vf", f"setpts=PTS/{speed},scale=1280:800,fps=30,format=yuv420p", "-c:v", "libx264", "-crf", "20", "-preset", "medium", raw])
         V = duration(raw)
         D = max(V, a)
         pad = max(0.0, D - V)

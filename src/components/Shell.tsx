@@ -32,6 +32,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <Link href="/denials/4471" className={pathname.startsWith("/denials") ? "font-semibold" : "text-muted hover:text-foreground"}>
               Authorizations
             </Link>
+            <Link href="/retrofit" className={pathname.startsWith("/retrofit") ? "font-semibold text-brand" : "text-brand hover:underline"}>
+              Retrofit any site
+            </Link>
             <Link href="/readiness" className={pathname.startsWith("/readiness") ? "font-semibold" : "text-muted hover:text-foreground"}>
               Readiness report
             </Link>

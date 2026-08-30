@@ -140,7 +140,34 @@ try {
   const st = await call(page, "get_appeal_status", { appeal_id: APPEAL });
   ok(st.out?.filed === true && /^LHP-A-\d+$/.test(st.out?.case_number ?? ""), `get_appeal_status → ${st.out?.case_number}, due ${st.out?.decision_due}`);
 
+
+  console.log("Retrofit platform");
+  const fx = await page.evaluate(async () => {
+    const r = await fetch("/api/retrofit/analyze", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ url: "https://overturn-one.vercel.app/legacy" }) });
+    return r.json();
+  });
+  ok(fx.mode === "fixture" && fx.findings?.some((f) => f.id === "documents") && fx.findings?.some((f) => f.id === "offline"), `legacy analysis (fixture): score ${fx.score?.value}, findings ${fx.findings?.map((f) => f.id).join(",")}`);
+  ok(fx.tools?.some((t) => t.name === "submit_appeal" && t.kind === "gated") && fx.tools?.some((t) => t.name === "draft_appeal"), `recommends the appeal trio: ${fx.tools?.map((t) => t.name).join(", ")}`);
+  ok(typeof fx.generatedCode === "string" && fx.generatedCode.includes("registerTool") && fx.generatedCode.includes("submit_appeal"), "generated code registers the recommended tools");
+  const guard = await page.evaluate(async () => (await fetch("/api/retrofit/analyze", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ url: "http://10.0.0.1/", live: true }) })).status);
+  ok(guard === 400, `private-address URLs are refused (HTTP ${guard})`);
+
+  await page.goto(`${BASE}/retrofit`, { waitUntil: "networkidle0" });
+  await sleep(600);
+  names = await toolNames(page);
+  ok(names.includes("analyze_site") && names.includes("get_readiness_report") && !names.includes("draft_appeal"), `retrofit tools registered on /retrofit: ${names.join(", ")}`);
+  const an = await call(page, "analyze_site", { url: "https://overturn-one.vercel.app/legacy" });
+  ok(typeof an.out?.score?.value === "number" && an.out?.tools_recommended >= 5, `analyze_site → score ${an.out?.score?.value}, ${an.out?.tools_recommended} tools`);
+  const rec = await call(page, "list_recommended_tools", {});
+  ok(Array.isArray(rec.out) && rec.out.length >= 5, `list_recommended_tools → ${rec.out?.length}`);
+  const code = await call(page, "get_generated_code", { tool_name: "submit_appeal" });
+  ok(code.out?.kind === "gated", "get_generated_code(submit_appeal) → gated");
+  const rendered = await page.evaluate(() => /agent-readiness/i.test(document.body.innerText));
+  ok(rendered, "report rendered on the page");
+
   // Tool descriptions/outputs within budgets.
+  await page.goto(`${BASE}/appeals/${APPEAL}`, { waitUntil: "networkidle0" });
+  await sleep(400);
   const tools = await page.webmcp.tools();
   ok(tools.every((t) => (t.description ?? "").length <= 500), "all descriptions ≤ 500 chars");
 

@@ -1,0 +1,371 @@
+{
+  "url": "https://overturn-one.vercel.app/legacy",
+  "origin": "https://overturn-one.vercel.app",
+  "scannedAt": "2026-08-30T05:37:04.106Z",
+  "mode": "live",
+  "elapsedMs": 495,
+  "pages": [
+    {
+      "url": "https://overturn-one.vercel.app/legacy",
+      "status": 200,
+      "title": "Larkspur Health Plan — Member Services (legacy)",
+      "h1": "My Claims & Authorizations",
+      "forms": [],
+      "tables": [
+        {
+          "heading": "My Claims & Authorizations",
+          "headers": [
+            "Reference",
+            "Type",
+            "Service",
+            "Date",
+            "Status",
+            "Documents"
+          ],
+          "rows": 3
+        }
+      ],
+      "detailPairs": 0,
+      "links": {
+        "total": 4,
+        "sameOrigin": 4,
+        "pdf": [],
+        "mailto": [],
+        "tel": [],
+        "downloads": []
+      },
+      "iframes": 0,
+      "textSignals": {
+        "fax": [
+          "fax number"
+        ],
+        "mail": [],
+        "cannotSubmit": [],
+        "phoneOnly": [
+          "Call Member Services at 1-800-555-0190, Monday–Friday 8 a"
+        ],
+        "printSign": [],
+        "rules": []
+      },
+      "hasModelContext": false,
+      "objectHint": null,
+      "headers": {
+        "originAgentCluster": "?1",
+        "permissionsPolicy": "tools=(self)"
+      },
+      "pagination": false
+    },
+    {
+      "url": "https://overturn-one.vercel.app/legacy/denials/4471",
+      "status": 200,
+      "title": "Larkspur Health Plan — Member Services (legacy)",
+      "h1": "Prior Authorization PA-2026-004471",
+      "forms": [],
+      "tables": [],
+      "detailPairs": 5,
+      "links": {
+        "total": 6,
+        "sameOrigin": 6,
+        "pdf": [
+          "Determination_Letter_PA-2026-004471.pdf",
+          "Form LHP-402 — Member Appeal Request"
+        ],
+        "mailto": [],
+        "tel": [],
+        "downloads": []
+      },
+      "iframes": 0,
+      "textSignals": {
+        "fax": [
+          "fax to: 1-800-555-0147 Allow up to 7 calendar days from receipt for a standard appeal decisio",
+          "fax number"
+        ],
+        "mail": [
+          "Mail to: Member Appeals, P"
+        ],
+        "cannotSubmit": [
+          "cannot be submitted through this website at this time"
+        ],
+        "phoneOnly": [],
+        "printSign": [
+          "Download and print Form LHP-402 — Member Appeal Request (6 pages)",
+          "in blue or black ink"
+        ],
+        "rules": [
+          "See attached determination letter Documents Determination_Letter_PA-2026"
+        ]
+      },
+      "hasModelContext": false,
+      "objectHint": "appeal",
+      "headers": {
+        "originAgentCluster": "?1",
+        "permissionsPolicy": "tools=(self)"
+      },
+      "pagination": false
+    }
+  ],
+  "summary": {
+    "pagesScanned": 2,
+    "forms": 0,
+    "tables": 1,
+    "pdfs": 2,
+    "offlineChannels": 7,
+    "existingWebMCP": false,
+    "headersOk": true
+  },
+  "score": {
+    "value": 40,
+    "grade": "D",
+    "label": "Navigable, but the consequential steps are trapped"
+  },
+  "findings": [
+    {
+      "id": "documents",
+      "severity": "blocker",
+      "title": "Data trapped in documents",
+      "detail": "2 PDF link(s). The facts an agent needs — reasons, ids, deadlines, rules — live inside documents it must download and guess from.",
+      "fix": "Expose the same facts as read tools (get_…); keep the PDF for humans.",
+      "evidence": [
+        {
+          "page": "/legacy/denials/4471",
+          "snippet": "Determination_Letter_PA-2026-004471.pdf"
+        },
+        {
+          "page": "/legacy/denials/4471",
+          "snippet": "Form LHP-402 — Member Appeal Request"
+        }
+      ]
+    },
+    {
+      "id": "offline",
+      "severity": "blocker",
+      "title": "Offline submission channel",
+      "detail": "The consequential step is mail, fax, print-and-sign, or explicitly 'cannot be submitted online'. No browser agent can action it; every automated run stalls here.",
+      "fix": "Add a gated submit tool: returns pending_confirmation, the page shows a confirm card, only the user's click commits. Add a status tool for what was filed.",
+      "evidence": [
+        {
+          "page": "/legacy",
+          "snippet": "fax number"
+        },
+        {
+          "page": "/legacy/denials/4471",
+          "snippet": "fax to: 1-800-555-0147 Allow up to 7 calendar days from receipt for a standard appeal decisio"
+        },
+        {
+          "page": "/legacy/denials/4471",
+          "snippet": "fax number"
+        },
+        {
+          "page": "/legacy/denials/4471",
+          "snippet": "Mail to: Member Appeals, P"
+        },
+        {
+          "page": "/legacy/denials/4471",
+          "snippet": "cannot be submitted through this website at this time"
+        },
+        {
+          "page": "/legacy/denials/4471",
+          "snippet": "Download and print Form LHP-402 — Member Appeal Request (6 pages)"
+        }
+      ]
+    },
+    {
+      "id": "rules",
+      "severity": "gap",
+      "title": "Decision rules referenced, not exposed",
+      "detail": "Pages cite a policy or 'see attached' without showing the criteria. Meeting rules you cannot read is luck.",
+      "fix": "Expose the cited criteria as a read tool (get_decision_criteria) itemized with ids.",
+      "evidence": [
+        {
+          "page": "/legacy/denials/4471",
+          "snippet": "See attached determination letter Documents Determination_Letter_PA-2026"
+        }
+      ]
+    },
+    {
+      "id": "phone",
+      "severity": "gap",
+      "title": "Phone-only channel with business hours",
+      "detail": "Questions and changes route to a phone number with hours. The agent's path ends at 'call us'.",
+      "fix": "Read tools for the answers the phone line gives (status, deadlines, requirements).",
+      "evidence": [
+        {
+          "page": "/legacy",
+          "snippet": "Call Member Services at 1-800-555-0190, Monday–Friday 8 a"
+        }
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "name": "list_claims_authorizations",
+      "kind": "read",
+      "description": "List \"My Claims & Authorizations\" rows with columns Reference, Type, Service, Date, Status, Documents. Returns ids for detail tools.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Optional filter"
+          }
+        }
+      },
+      "source": {
+        "page": "/legacy",
+        "affordance": "table \"My Claims & Authorizations\" (3 rows)"
+      },
+      "why": "A table is a list the agent should query, not scrape."
+    },
+    {
+      "name": "get_determination_letter",
+      "kind": "read",
+      "description": "Structured contents of \"Determination_Letter_PA-2026-004471.pdf\" — the fields an agent would otherwise have to extract from the PDF.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Document or reference id"
+          }
+        }
+      },
+      "source": {
+        "page": "/legacy/denials/4471",
+        "affordance": "PDF link \"Determination_Letter_PA-2026-004471.pdf\""
+      },
+      "why": "Data trapped in a document becomes a read tool."
+    },
+    {
+      "name": "get_prior_authorization",
+      "kind": "read",
+      "description": "Structured detail for \"Prior Authorization\": every label/value pair on the page, plus ids and dates.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Reference id"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "source": {
+        "page": "/legacy/denials/4471",
+        "affordance": "5 label/value pairs"
+      },
+      "why": "Detail pages are read tools."
+    },
+    {
+      "name": "check_appeal_completeness",
+      "kind": "read",
+      "description": "Evaluate the draft appeal against the site's stated requirements; returns what is missing and what to ask the user for.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "source": {
+        "page": "/legacy",
+        "affordance": "requirements text"
+      },
+      "why": "Agents need a deterministic completeness signal before asking to submit."
+    },
+    {
+      "name": "get_appeal_status",
+      "kind": "read",
+      "description": "Status of a submitted appeal: reference number, received time, decision due, timeline.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "source": {
+        "page": "/legacy",
+        "affordance": "no online status today"
+      },
+      "why": "Filed things need a status tool."
+    },
+    {
+      "name": "get_decision_criteria",
+      "kind": "read",
+      "description": "The rules or policy the decision cites, itemized with ids and the evidence that satisfies each — so an agent can argue against them point by point.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Decision or reference id"
+          }
+        }
+      },
+      "source": {
+        "page": "/legacy/denials/4471",
+        "affordance": "See attached determination letter Documents Determination_Letter_PA-2026"
+      },
+      "why": "Decisions reference rules the user cannot see."
+    },
+    {
+      "name": "get_account_context",
+      "kind": "read",
+      "description": "Who is signed in and where things stand: open items, deadlines, and what needs attention. Call first to orient.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "source": {
+        "page": "/",
+        "affordance": "signed-in session"
+      },
+      "why": "Tools inherit the session; the agent needs a starting point."
+    },
+    {
+      "name": "draft_appeal",
+      "kind": "write",
+      "description": "Propose the appeal content, one section per requirement; rendered on the page labelled as agent-drafted, editable by the user. Not sent.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string"
+          },
+          "sections": {
+            "type": "string",
+            "description": "JSON array of {requirement, text}"
+          }
+        },
+        "required": [
+          "sections"
+        ]
+      },
+      "source": {
+        "page": "/legacy",
+        "affordance": "submission instructions"
+      },
+      "why": "Replace the paper/PDF form with a typed draft the user can edit."
+    },
+    {
+      "name": "submit_appeal",
+      "kind": "gated",
+      "description": "Request submission of the appeal. Does NOT submit: returns pending_confirmation and shows a Sign & submit card; only the user's click files it and returns a reference number.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "source": {
+        "page": "/legacy",
+        "affordance": "fax number"
+      },
+      "why": "The fax/mail step becomes an on-site, human-gated submission."
+    }
+  ],
+  "generatedCode": "// webmcp-tools.js — generated by Overturn Retrofit for https://overturn-one.vercel.app\n// Drop this module into the top-level page (not an iframe). Serve with headers:\n//   Origin-Agent-Cluster: ?1\n//   Permissions-Policy: tools=(self)\n// Reads carry readOnlyHint. Write tools return a proposal the page renders.\n// Gated tools return pending_confirmation — only the user's click on your confirm UI may commit.\n\nconst mc = document.modelContext ?? navigator.modelContext;\nconst controllers = new Map();\n\nasync function register(tool) {\n  controllers.get(tool.name)?.abort();\n  const c = new AbortController();\n  controllers.set(tool.name, c);\n  await mc.registerTool(tool, { signal: c.signal });\n}\n\n// TODO: wire these to your app's data and actions. Keep outputs under ~1.5K characters.\nconst app = {\n  read: async (name, input) => ({ todo: `return structured data for ${name}`, input }),\n  propose: async (name, input) => ({ status: \"proposed\", rendered: \"on page\", input }),\n  gate: async (name, input) => ({ status: \"pending_confirmation\", message: \"Confirm card shown; the user's click commits.\", input }),\n};\n\nexport async function registerWebMCPTools() {\n  if (!mc || typeof mc.registerTool !== \"function\") return; // browser without WebMCP: page keeps working\n  await register({\n    name: \"list_claims_authorizations\",\n    description: \"List \\\"My Claims & Authorizations\\\" rows with columns Reference, Type, Service, Date, Status, Documents. Returns ids for detail tools.\",\n    inputSchema: {\"type\":\"object\",\"properties\":{\"query\":{\"type\":\"string\",\"description\":\"Optional filter\"}}},\n    annotations: { readOnlyHint: true },\n    execute: (input) => app.read(\"list_claims_authorizations\", input),\n  });\n  await register({\n    name: \"get_determination_letter\",\n    description: \"Structured contents of \\\"Determination_Letter_PA-2026-004471.pdf\\\" — the fields an agent would otherwise have to extract from the PDF.\",\n    inputSchema: {\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"string\",\"description\":\"Document or reference id\"}}},\n    annotations: { readOnlyHint: true },\n    execute: (input) => app.read(\"get_determination_letter\", input),\n  });\n  await register({\n    name: \"get_prior_authorization\",\n    description: \"Structured detail for \\\"Prior Authorization\\\": every label/value pair on the page, plus ids and dates.\",\n    inputSchema: {\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"string\",\"description\":\"Reference id\"}},\"required\":[\"id\"]},\n    annotations: { readOnlyHint: true },\n    execute: (input) => app.read(\"get_prior_authorization\", input),\n  });\n  await register({\n    name: \"check_appeal_completeness\",\n    description: \"Evaluate the draft appeal against the site's stated requirements; returns what is missing and what to ask the user for.\",\n    inputSchema: {\"type\":\"object\",\"properties\":{}},\n    annotations: { readOnlyHint: true },\n    execute: (input) => app.read(\"check_appeal_completeness\", input),\n  });\n  await register({\n    name: \"get_appeal_status\",\n    description: \"Status of a submitted appeal: reference number, received time, decision due, timeline.\",\n    inputSchema: {\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"string\"}}},\n    annotations: { readOnlyHint: true },\n    execute: (input) => app.read(\"get_appeal_status\", input),\n  });\n  await register({\n    name: \"get_decision_criteria\",\n    description: \"The rules or policy the decision cites, itemized with ids and the evidence that satisfies each — so an agent can argue against them point by point.\",\n    inputSchema: {\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"string\",\"description\":\"Decision or reference id\"}}},\n    annotations: { readOnlyHint: true },\n    execute: (input) => app.read(\"get_decision_criteria\", input),\n  });\n  await register({\n    name: \"get_account_context\",\n    description: \"Who is signed in and where things stand: open items, deadlines, and what needs attention. Call first to orient.\",\n    inputSchema: {\"type\":\"object\",\"properties\":{}},\n    annotations: { readOnlyHint: true },\n    execute: (input) => app.read(\"get_account_context\", input),\n  });\n  await register({\n    name: \"draft_appeal\",\n    description: \"Propose the appeal content, one section per requirement; rendered on the page labelled as agent-drafted, editable by the user. Not sent.\",\n    inputSchema: {\"type\":\"object\",\"properties\":{\"summary\":{\"type\":\"string\"},\"sections\":{\"type\":\"string\",\"description\":\"JSON array of {requirement, text}\"}},\"required\":[\"sections\"]},\n    annotations: { readOnlyHint: false },\n    execute: (input) => app.propose(\"draft_appeal\", input),\n  });\n  await register({\n    name: \"submit_appeal\",\n    description: \"Request submission of the appeal. Does NOT submit: returns pending_confirmation and shows a Sign & submit card; only the user's click files it and returns a reference number.\",\n    inputSchema: {\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"string\"}}},\n    annotations: { readOnlyHint: false },\n    execute: (input) => app.gate(\"submit_appeal\", input),\n  });\n}\n\nregisterWebMCPTools();",
+  "markdown": "# Agent-readiness report — https://overturn-one.vercel.app\n\nScanned 2026-08-30T05:37:04.106Z (live) · 2 pages · score **40/100 (D)** — Navigable, but the consequential steps are trapped\n\n| | |\n|---|---|\n| Forms | 0 |\n| Tables / lists | 1 |\n| Documents (PDF) | 2 |\n| Offline channels (fax/mail/phone-only) | 7 |\n| Existing WebMCP | no |\n| WebMCP headers | present |\n\n## Findings\n\n### Blocker — Data trapped in documents\n2 PDF link(s). The facts an agent needs — reasons, ids, deadlines, rules — live inside documents it must download and guess from.\n\n**Fix:** Expose the same facts as read tools (get_…); keep the PDF for humans.\n- /legacy/denials/4471 — \"Determination_Letter_PA-2026-004471.pdf\"\n- /legacy/denials/4471 — \"Form LHP-402 — Member Appeal Request\"\n\n### Blocker — Offline submission channel\nThe consequential step is mail, fax, print-and-sign, or explicitly 'cannot be submitted online'. No browser agent can action it; every automated run stalls here.\n\n**Fix:** Add a gated submit tool: returns pending_confirmation, the page shows a confirm card, only the user's click commits. Add a status tool for what was filed.\n- /legacy — \"fax number\"\n- /legacy/denials/4471 — \"fax to: 1-800-555-0147 Allow up to 7 calendar days from receipt for a standard appeal decisio\"\n- /legacy/denials/4471 — \"fax number\"\n\n### Gap — Decision rules referenced, not exposed\nPages cite a policy or 'see attached' without showing the criteria. Meeting rules you cannot read is luck.\n\n**Fix:** Expose the cited criteria as a read tool (get_decision_criteria) itemized with ids.\n- /legacy/denials/4471 — \"See attached determination letter Documents Determination_Letter_PA-2026\"\n\n### Gap — Phone-only channel with business hours\nQuestions and changes route to a phone number with hours. The agent's path ends at 'call us'.\n\n**Fix:** Read tools for the answers the phone line gives (status, deadlines, requirements).\n- /legacy — \"Call Member Services at 1-800-555-0190, Monday–Friday 8 a\"\n\n## Recommended tools\n\n| Tool | Kind | Why |\n|---|---|---|\n| `list_claims_authorizations` | read | A table is a list the agent should query, not scrape. |\n| `get_determination_letter` | read | Data trapped in a document becomes a read tool. |\n| `get_prior_authorization` | read | Detail pages are read tools. |\n| `check_appeal_completeness` | read | Agents need a deterministic completeness signal before asking to submit. |\n| `get_appeal_status` | read | Filed things need a status tool. |\n| `get_decision_criteria` | read | Decisions reference rules the user cannot see. |\n| `get_account_context` | read | Tools inherit the session; the agent needs a starting point. |\n| `draft_appeal` | write | Replace the paper/PDF form with a typed draft the user can edit. |\n| `submit_appeal` | gated | The fax/mail step becomes an on-site, human-gated submission. |\n\n## Design rules\n- Reads are free (`readOnlyHint`); writes return proposals the page renders; gated writes return `pending_confirmation` and only the user's click commits.\n- Register on the top-level page; scope tools to the page/state the user is on; descriptions ≤ 500 chars; outputs ≤ 1.5K chars.\n- Tools run in the user's signed-in session — no new OAuth."
+}
