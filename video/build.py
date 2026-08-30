@@ -53,12 +53,13 @@ for name in ("retrofit", "before", "after"):
 clips = []
 for seg in spec["segments"]:
     clip = WORK / f"{seg['id']}.mp4"
-    a = seg["adur"] + 0.7  # lead-in + tail
+    lead = float(seg.get("lead", 0.5))  # seconds of silence before the narration starts
+    a = seg["adur"] + lead + 0.2  # lead-in + tail
     if seg["kind"] == "slide":
         D = a
         png = slides_dir / seg["slide"].replace(".html", ".png")
         run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-framerate", "30", "-i", png, "-i", seg["audio"],
-             "-filter_complex", f"[0:v]scale=1280:800,format=yuv420p,fade=t=in:st=0:d=0.5,fade=t=out:st={D-0.5:.2f}:d=0.5[v];[1:a]adelay=500|500,apad[a]",
+             "-filter_complex", f"[0:v]scale=1280:800,format=yuv420p,fade=t=in:st=0:d=0.5,fade=t=out:st={D-0.5:.2f}:d=0.5[v];[1:a]adelay={int(lead*1000)}|{int(lead*1000)},apad[a]",
              "-map", "[v]", "-map", "[a]", "-t", f"{D:.2f}", "-r", "30", "-c:v", "libx264", "-crf", "20", "-preset", "medium", "-c:a", "aac", "-b:a", "160k", "-ar", "48000", clip])
     else:
         d = WORK / seg["capture"]
@@ -70,7 +71,7 @@ for seg in spec["segments"]:
         D = max(V, a)
         pad = max(0.0, D - V)
         run(["ffmpeg", "-y", "-loglevel", "error", "-i", raw, "-i", seg["audio"],
-             "-filter_complex", f"[0:v]tpad=stop_mode=clone:stop_duration={pad:.2f},fade=t=in:st=0:d=0.4,fade=t=out:st={D-0.4:.2f}:d=0.4[v];[1:a]adelay=500|500,apad[a]",
+             "-filter_complex", f"[0:v]tpad=stop_mode=clone:stop_duration={pad:.2f},fade=t=in:st=0:d=0.4,fade=t=out:st={D-0.4:.2f}:d=0.4[v];[1:a]adelay={int(lead*1000)}|{int(lead*1000)},apad[a]",
              "-map", "[v]", "-map", "[a]", "-t", f"{D:.2f}", "-r", "30", "-c:v", "libx264", "-crf", "20", "-preset", "medium", "-c:a", "aac", "-b:a", "160k", "-ar", "48000", clip])
         print(f"  {seg['id']}: footage {V:.1f}s, narration {seg['adur']:.1f}s → clip {D:.1f}s")
     clips.append(clip)

@@ -6,7 +6,8 @@
       "id": "s0_what",
       "kind": "slide",
       "slide": "slide_title.html",
-      "text": "Analyze, recommend, and convert any website to WebMCP, in one shot. Websites were designed for humans. Some grew APIs; many were patched in the back end just to keep working for people clicking. Agents hit every one of those patches. Overturn finds the readiness gaps, recommends the fixes, and implements the WebMCP tool layer, with the person still in charge."
+      "text": "Analyze, recommend, and convert any website to WebMCP, in one shot. Websites were designed for humans. Some grew APIs; many were patched in the back end just to keep working for people clicking. Agents hit every one of those patches. Overturn finds the readiness gaps and implements the WebMCP layer where possible; where it isn't, it gives recommendations, guidance and potential fixes, with the person still in charge.",
+      "lead": 2.0
     },
     {
       "id": "s1_tam",
@@ -18,34 +19,34 @@
       "id": "s2_case",
       "kind": "slide",
       "slide": "slide_case.html",
-      "text": "Take healthcare. Medicare Advantage alone: fifty-three million prior-authorization decisions a year. Only eleven and a half percent of denials appealed; eighty-one percent of appeals won. Nobody appeals, because the portal is a PDF letter, a six-page form and a fax number. Let's make this member portal WebMCP-ready."
-    },
-    {
-      "id": "s3_retrofit",
-      "kind": "capture",
-      "capture": "retrofit",
-      "text": "Paste the portal's URL. Overturn reads its forms, tables, documents and submission instructions. Readiness: forty out of a hundred. Two blockers: the facts live inside PDFs, and the consequential step is fax or mail. Two gaps: the rules the decision cites aren't exposed, and support is phone-only. From that it recommends nine tools: reads for the list, the decision and the plan's criteria; a draft that renders as a proposal; a completeness check; and a submit gated behind a human click. Then it generates the register-tool code, and applies it.",
-      "speed": 1.15
+      "text": "Let's see how this benefits one sector. Let's take healthcare. Medicare Advantage alone: fifty-three million prior-authorization decisions a year. Only eleven and a half percent of denials are appealed, yet eighty-one percent of those appeals win. Appealing means a PDF letter, a six-page form and a fax number. Let's make this member portal WebMCP-ready."
     },
     {
       "id": "s4_before",
       "kind": "capture",
       "capture": "before",
       "speed": 2.2,
-      "text": "Before: an automation agent on the legacy portal gets exactly as far as a person does. The letter, the six-page form, the fax number. It stalls."
+      "text": "This is the portal today. The denial is a PDF letter. The appeal is a six-page form. Submission is by fax or mail. A browser-automation agent gets exactly as far as a person does, and stalls."
+    },
+    {
+      "id": "s3_retrofit",
+      "kind": "capture",
+      "capture": "retrofit",
+      "text": "Now paste the portal's URL into Overturn. Readiness: forty out of a hundred. Two blockers: the facts live inside PDFs, and the consequential step is fax or mail. Two gaps: the rules the decision cites aren't exposed, and support is phone-only. From that it recommends nine tools: reads for the list, the decision and the plan's criteria; a draft that renders as a proposal; a completeness check; and a submit gated behind a human click. Then it generates the register-tool code, and applies it.",
+      "speed": 1.15
     },
     {
       "id": "s5_after",
       "kind": "capture",
       "capture": "after",
-      "speed": 1.75,
-      "text": "After: the same portal with the recommended tools. The agent reads the structured denial and the plan's five criteria, opens the appeal, and drafts one argument per criterion citing Maya's records; the draft lands on the page, labelled and editable. Attaching records is Maya's job; she attaches three and rewrites one argument. The agent re-checks, five of five, proposes expedited review, then asks to submit. It cannot submit; it can only ask. Maya signs. Case number, seventy-two-hour clock, and the tool surface changes."
+      "speed": 1.85,
+      "text": "After: the same portal with the recommended tools. The agent reads the structured denial and the plan's five criteria, opens the appeal, and drafts one argument per criterion citing Maya's records; the draft lands on the page, labelled and editable. Attaching records is Maya's job; she attaches three and rewrites one argument. The agent re-checks, five of five, proposes expedited review, then asks to submit. It cannot submit; it can only ask. Maya signs. Case number, seventy-two-hour clock."
     },
     {
       "id": "s6_close",
       "kind": "slide",
       "slide": "slide_close.html",
-      "text": "Every website was built for humans. Overturn makes each one agent-ready without taking the human out. Built by Prathap, Rajani and Chitral. Open source, MIT."
+      "text": "Every website was built for humans. Overturn makes each one agent-ready without taking the human out. Built by Prathap, Rajani and Chitral."
     }
   ]
 }
