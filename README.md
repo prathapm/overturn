@@ -1,8 +1,10 @@
 # Overturn
 
-**Turn any website into one people and their agents use together.**
-Analyze a site → find the gaps → recommend the WebMCP tools → generate the code → prove it, with the
-person still in charge.
+**Analyze, Recommend, and Convert Any Website to WebMCP—in One Shot**
+
+Identify readiness gaps, receive actionable recommendations, and automatically implement the changes needed for WebMCP.
+
+Analyze a site → find the gaps → recommend the WebMCP tools → generate and apply the code → prove it, with the person still in charge.
 
 Entry for [The WebMCP Challenge](https://webmcp.devpost.com/) (OpenAI, Sep 2026).
 

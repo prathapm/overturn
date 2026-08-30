@@ -6,7 +6,7 @@
       "id": "s0_title",
       "kind": "slide",
       "slide": "slide_title.html",
-      "text": "Most of the web was built for people clicking. Agents arrive and guess: they read PDFs, fill forms whose rules they can't see, and stop at fax numbers. WebMCP lets a site say exactly what an agent may do, but every site has to be retrofitted by hand. Overturn is the process that does it: analyze, find the gaps, recommend the tools, generate the code, and prove it with the person still in charge."
+      "text": "Analyze, recommend, and convert any website to WebMCP, in one shot. Most of the web was built for people clicking. Agents arrive and guess: they read PDFs, fill forms whose rules they can't see, and stop at fax numbers. WebMCP lets a site say exactly what an agent may do, but every site has to be retrofitted. Overturn identifies the readiness gaps, gives actionable recommendations, and implements the changes: the WebMCP tool layer, generated and applied, with the person still in charge."
     },
     {
       "id": "s1_retrofit",
@@ -44,7 +44,7 @@
       "id": "s6_close",
       "kind": "slide",
       "slide": "slide_close.html",
-      "text": "Overturn. Analyze any site, retrofit it for agents, keep the person in charge. Built for the WebMCP Challenge by Prathap, Rajani and Chitral. Open source, MIT."
+      "text": "Overturn. Analyze, recommend, and convert any website to WebMCP, in one shot, with the person in charge. Built for the WebMCP Challenge by Prathap, Rajani and Chitral. Open source, MIT."
     }
   ]
 }

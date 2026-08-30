@@ -39,7 +39,8 @@ export default function RetrofitPage() {
     <div className="space-y-6">
       <div>
         <div className="text-xs font-semibold uppercase tracking-wide text-brand">Overturn Retrofit</div>
-        <h1 className="mt-1 text-2xl font-semibold">Turn any website into one people and their agents use together.</h1>
+        <h1 className="mt-1 text-2xl font-semibold">Analyze, Recommend, and Convert Any Website to WebMCP—in One Shot</h1>
+        <p className="mt-1 text-sm font-medium">Identify readiness gaps, receive actionable recommendations, and automatically implement the changes needed for WebMCP.</p>
         <p className="mt-2 max-w-prose text-sm text-muted">
           Paste a URL. Retrofit reads the site’s forms, tables, documents and submission instructions, scores its agent-readiness,
           lists the gaps, and recommends a WebMCP tool inventory — reads free, writes as proposals, consequential steps gated behind a

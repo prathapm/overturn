@@ -1,7 +1,8 @@
 # Overturn — Devpost submission text
 
-**Tagline:** Turn any website into one people and their agents use together — analyze it, find the
-gaps, recommend the WebMCP tools, generate the code, and prove it with the person still in charge.
+**Title:** Analyze, Recommend, and Convert Any Website to WebMCP—in One Shot
+
+**Tagline:** Identify readiness gaps, receive actionable recommendations, and automatically implement the changes needed for WebMCP.
 
 ## Why this use case is a strong fit for WebMCP
 
