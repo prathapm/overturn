@@ -6,7 +6,7 @@
       "id": "s0_title",
       "kind": "slide",
       "slide": "slide_title.html",
-      "text": "Analyze, recommend, and convert any website to WebMCP, in one shot. Most of the web was built for people clicking. Agents arrive and guess: they read PDFs, fill forms whose rules they can't see, and stop at fax numbers. WebMCP lets a site say exactly what an agent may do, but every site has to be retrofitted. Overturn identifies the readiness gaps, gives actionable recommendations, and implements the changes: the WebMCP tool layer, generated and applied, with the person still in charge."
+      "text": "Analyze, recommend, and convert any website to WebMCP, in one shot. The web was built for people clicking; agents arrive and guess: PDFs, forms whose rules they can't see, fax numbers. WebMCP lets a site say exactly what an agent may do, but every site has to be retrofitted. Overturn finds the readiness gaps, recommends the fixes, and implements the WebMCP tool layer, with the person still in charge."
     },
     {
       "id": "s1_retrofit",
@@ -38,13 +38,13 @@
       "id": "s5_impact",
       "kind": "slide",
       "slide": "slide_impact.html",
-      "text": "Why it matters. Every site owner faces this retrofit; Overturn turns a guess into a plan. In healthcare the plan side is being made machine-readable by law: CMS rule 0057-F, seven-day decisions now, a structured API by 2027. And the payoff counts: three point six million winnable denials a year go unfiled. Each becomes one sitting. The same shape repeats in every claim-like dispute."
+      "text": "Why it matters. Every site owner faces this retrofit; Overturn turns a guess into a plan. In healthcare, the plan side is being made machine-readable by law: CMS rule 0057-F, seven-day decisions now, a structured API by 2027. The payoff counts: three point six million winnable denials a year go unfiled. Each becomes one sitting. The same shape repeats in every claim-like dispute."
     },
     {
       "id": "s6_close",
       "kind": "slide",
       "slide": "slide_close.html",
-      "text": "Overturn. Analyze, recommend, and convert any website to WebMCP, in one shot, with the person in charge. Built for the WebMCP Challenge by Prathap, Rajani and Chitral. Open source, MIT."
+      "text": "Overturn. Analyze, recommend, and convert any website to WebMCP, in one shot. Built by Prathap, Rajani and Chitral. Open source, MIT."
     }
   ]
 }
