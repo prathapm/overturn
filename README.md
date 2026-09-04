@@ -14,7 +14,7 @@ Entry for [The WebMCP Challenge](https://webmcp.devpost.com/) (OpenAI, Sep 2026)
 | **The plan, built** (agent-native appeals portal) | https://overturn-one.vercel.app |
 | **The "before"** (legacy portal) | https://overturn-one.vercel.app/legacy |
 | **Retrofit record** | https://overturn-one.vercel.app/readiness |
-| **Video** | VIDEO_URL |
+| **Video** | https://youtu.be/ZpAkK57-Bm0 |
 
 > Every payer, clinic, member, record, policy and number on the site is fictional and synthetic.
 > Larkspur Health Plan does not exist.
